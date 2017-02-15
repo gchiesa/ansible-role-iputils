@@ -1,0 +1,8 @@
+---
+- include: common.yml
+- include: consul.yml
+  when: '"consul" in modules'
+- include: rethinkdb.yml
+  when: '"rethinkdb" in modules'
+- include: etcd.yml
+  when: '"etcd" in modules'

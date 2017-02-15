@@ -1,0 +1,17 @@
+---
+- name: Get the etcd bootstrap IP
+  shell: getent ahostsv4 {{ etcd_bootstrap_hostname }} | grep -v '127.0' | grep 'STREAM' | awk '{print $1}'
+  register: etcd_ip
+  when: not host_natted|bool
+  tags: etcd_bootstrap
+
+- name: Get the etcd bootstrap IP (natted)
+  shell: host {{ etcd_bootstrap_hostname }} | awk '{print $(NF)}'
+  register: etcd_ip_natted
+  when: host_natted|bool
+  tags: etcd_bootstrap
+
+- name: Save fact etcd bootstrap IP
+  set_fact:
+    iputils_ip_etcd_bootstrap: "{{ etcd_ip_natted.stdout | default(etcd_ip.stdout) }}"
+  tags: etcd_bootstrap

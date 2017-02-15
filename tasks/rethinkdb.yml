@@ -1,0 +1,17 @@
+---
+- name: Get the rethinkdb master IP
+  shell: getent ahostsv4 {{ groups['swarm_managers'][0] }} | grep -v '127.0' | grep 'STREAM' | awk '{print $1}'
+  register: rethinkdb_ip
+  when: not host_natted|bool
+  tags: rethinkdb
+
+- name: Get the rethinkdb master IP (natted)
+  shell: host {{ groups['swarm_managers'][0] }} | awk '{print $(NF)}'
+  register: rethinkdb_ip_natted
+  when: host_natted|bool
+  tags: rethinkdb
+
+- name: Set the rethinkdb master IP
+  set_fact:
+    iputils_ip_rethinkdb_master: "{{ rethinkdb_ip_natted.stdout | default(rethinkdb_ip.stdout) }}"
+  tags: rethinkdb

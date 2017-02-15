@@ -1,0 +1,5 @@
+---
+# defaults file for ansible-role-iputils
+host_natted: false
+consul_bootstrap_hostname: 127.0.0.1
+etcd_bootstrap_hostname: 127.0.0.1

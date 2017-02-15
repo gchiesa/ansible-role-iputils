@@ -1,0 +1,29 @@
+---
+- name: Gather host ip
+  shell: getent ahostsv4 $(hostname -f) | grep -v '127.0' | grep 'STREAM' | awk '{print $1}'
+  register: host_ip_internal
+  tags: common
+
+- name: Get the host ip external (natted)
+  shell: host $(hostname -f) | awk '{print $(NF)}'
+  register: host_ip_external_natted
+  when: host_natted|bool == True
+  tags: common
+
+- name: Get the host ip external
+  shell: getent ahostsv4  $(hostname -f) | grep -v '127.0' | grep 'STREAM' | awk '{print $1}'
+  register: host_ip_external
+  when: (host_natted is undefined) or (host_natted|bool == False)
+  tags: common
+
+- name: Get the address of docker0
+  shell: ip addr show docker0 | grep -Po 'inet \K[\d.]+'
+  register: docker0_ip
+  tags: common
+
+- name: Saving facts
+  set_fact:
+    iputils_ip_internal: "{{ host_ip_internal.stdout }}"
+    iputils_ip_external: "{{ host_ip_external_natted.stdout | default(host_ip_external.stdout) }}"
+    iputils_ip_docker0: "{{ docker0_ip.stdout }}"
+  tags: common
