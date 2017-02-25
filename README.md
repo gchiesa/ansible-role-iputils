@@ -1,7 +1,7 @@
-Role Name
-=========
+gchiesa.iputils
+===============
 
-This role set the facts based on the modules loaded. 
+This is a role containing utilities used as requirement from the other roles
 
 Requirements
 ------------
@@ -11,7 +11,10 @@ none
 Role Variables
 --------------
 
-The list of role variables depends on the modules activated by the play / role 
+The modules can be activated by passing the variable:
+```
+modules = ["common", ...]
+```
 
 ### Common variables
 ```
