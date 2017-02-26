@@ -34,8 +34,8 @@ galaxy_info:
   #platforms:
   platforms:    
     - name: EL
-        versions:
-          - 7
+      versions:
+        - 7
            
   galaxy_tags: [iputils, docker, etcd, swarm, portainer]
     # List tags for your role here, one per line. A tag is
